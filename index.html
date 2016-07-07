@@ -1,0 +1,270 @@
+<!--Aplicación creada por @jpuriol en abril de 2015-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>AIESEC Verano</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--CSS-->
+	<link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/mis_estilos.css" rel="stylesheet">
+	<!--JavaScript-->
+	<script src="js/jquery-1.11.2.min.js"></script>
+	<script src="js/jquery.ui.touch-punch.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript">
+	  // variables globales
+		var estudios = "", zona = "", programa = "";
+	
+		//función principal desde la que se empiezan las llamadas a las demás
+		$(function()
+		{
+			var p = crearPregunta ("¿Cursas o has cursado estudios universitarios?", ["Si", "No"], ["uni-si", "uni-no"]);
+			$("#uni").html(p);
+			$("#uni-si").on("click", siUni);
+			$("#uni-no").on("click", noUni);
+		});
+		
+		function siUni ()
+		{
+		  //limpio las preguntas de abajo
+		  $("#curso").html("");
+		  $("#resultado").html("");
+		  $("#concretar").html("");
+		  $("#area").html("");
+		  $("#zona").html("");
+		  $("#enviar").html("");
+		  $("#extra").html("");
+		  $("#resultado").attr("class", "");
+		  
+		  var pregunta = crearPregunta ("¿Qué prefieres?", ["Prácticas", "Voluntariado"], ["pr", "vol"]);
+			$("#practicas-voluntariado").html(pregunta);
+			$("#pr").on("click", practicas);
+			$("#vol").on("click",  voluntariado);
+		}
+		
+		function noUni ()
+		{
+		  //limpio las preguntas de abajo
+		  $("#curso").html("");
+		  $("#practicas-voluntariado").html("");
+		  $("#concretar").html("");
+		  $("#area").html("");
+		  $("#zona").html("");
+		  $("#enviar").html("");
+		  $("#extra").html("");
+		  $("#resultado").attr("class", "");
+		  
+		  gc();
+		}
+		
+		function practicas ()
+		{
+		  //limpio las peguntas de abajo
+		  $("#resultado").html("");
+		  $("#concretar").html("");
+		  $("#area").html("");
+		  $("#zona").html("");
+		  $("#enviar").html("");
+		  $("#extra").html("");
+		  $("#resultado").attr("class", "");
+		  
+			var pregunta = crearPregunta ("¿En qué curso estás? ", ["1-2", "3-4", "He terminado"], ["1-2", "3-4", "fin"]);
+			$("#curso").html(pregunta);
+			$("#1-2").on("click", gc);
+			$("#3-4").on("click",  ge);
+			$("#fin").on("click", gt);
+		}
+		
+		function voluntariado ()
+		{
+		  // limpio las preguntas de abajo
+		  $("#curso").html("");
+		  $("#zona").html("");
+		  $("#area").html("");
+		  $("#enviar").html("");
+		  $("#extra").html("");
+		  $("#resultado").attr("class", "");
+		  
+		  gc();
+		}
+		
+		function gc ()
+		{
+		  // limpio las pregunta de abajo
+		  $("#zona").html("");
+		  $("#area").html("");
+		  $("#enviar").html("");
+		  $("#extra").html("");
+		  $("#resultado").attr("class", "");
+		  
+		  programa = "gc";
+			resultado("Global Citizen. Voluntariados en el extranjero. (6 - 8 semanas)");
+		}
+		
+		function ge ()
+		{
+		  // limpio las pregunta de abajo
+		  $("#zona").html("");
+		  $("#area").html("");
+		  $("#enviar").html("");
+		  $("#extra").html("");
+		  $("#resultado").attr("class", "");
+		  
+		  programa = "ge";
+			resultado ("Global Entrepeneur. Prácticas en start-ups en el extranjero. (6 - 8 semanas)");
+		}
+		
+		function gt ()
+		{
+		  // limpio las pregunta de abajo
+		  $("#zona").html("");
+		  $("#area").html("");
+		  $("#enviar").html("");
+		  $("#extra").html("");
+		  $("#resultado").attr("class", "");
+		  
+		  programa = "gt"
+			resultado("Global Talent. Prácticas remuneradas en el extranejero. (3-18 meses)");
+		}
+		
+		function resultado (texto)
+		{
+		  $("#resultado").attr("class", "resaltar-marron");
+	    $("#resultado").html(texto);
+	    
+	    $("#concretar").html("¿Quieres saber a dónde podrías irte?");
+	    //preguntas finales
+	    if ((programa === "")) // SI quiero preguntar los estudios
+	    {
+  	    var pregunta = crearPregunta("¿Qué área se adapta mejor a tus estudios?", ["Educación", "Ciencia e Ingeniería", "Marketing"], ["edu", "ci", "mkt"]);    
+  	    $("#area").html(pregunta);
+  	    
+  	    $("#edu").on("click", function() { estudios = "edu"; preguntaZonas(); $("#zona").html("");  $("#enviar").html("");});
+  	    $("#ci").on("click", function() { estudios = "ci"; preguntaZonas(); $("#zona").html("");  $("#enviar").html("");});
+  	    $("#mkt").on("click", function() { estudios = "mkt"; preguntaZonas(); $("#zona").html("");  $("#enviar").html("");});
+	    }
+	    else if ((programa === "gc") || (programa === "ge") || (programa === "gt")) // NO quiero preguntar los estudios
+	      preguntaZonas();
+		}
+		
+		function preguntaZonas()
+		{
+		  var pregunta = crearPregunta("¿Qué zona del mundo prefieres?", ["África", "Oriente Medio y Norte de África", "Centro y Este de Europa", "Asía-Pacífico", "Europa Occidental y América del Norte", "Latinoamérica"], ["a", "om-na", "c-e-e", "ap", "eo-an", "lt"]);
+		  $("#zona").html(pregunta);
+		  
+		  $("#a").on("click", function() { zona = "a"; botonEnviar(); $("#extra").html("");});
+		  $("#om-na").on("click", function() { zona ="om-na"; botonEnviar(); $("#extra").html("");});
+		  $("#c-e-e").on("click", function() { zona ="c-e-e"; botonEnviar(); $("#extra").html("");});
+		  $("#ap").on("click", function() { zona ="ap"; botonEnviar(); $("#extra").html("");});
+		  $("#eo-an").on("click", function() { zona ="eo-an"; botonEnviar(); $("#extra").html("");});
+		  $("#lt").on("click", function() { zona ="lt"; botonEnviar(); $("#extra").html("");});
+		  
+		}
+		
+		function botonEnviar()
+		{
+		  $("#enviar").html("<button type=\"button\" class=\"btn btn-primary\">¡Buscar oportunidad!</button><br> &#9650;<i>¡Solo te falta pulsar este botón!</i>");
+		  
+		  $("#enviar").on("click", eleccionOportunidad);
+		}
+		
+		function eleccionOportunidad()
+		{
+		  //
+		  //window.location.assign("oportunidades/" + programa + "/" + zona + "/");
+		  
+		  // Oportunidades de global citizen
+		  if ((programa === "gc") && (zona === "a"))
+		    $("#extra").html("<strong>Falta añadir oputunidad Global Citizen + Africa</strong>");
+		  else if ((programa === "gc") && (zona === "om-na"))
+		    $("#extra").html("<strong>Falta añadir oportunidad Global Citizen  + Oriente Medio y Norte de África</strong>");
+		  else if ((programa === "gc") && (zona === "c-e-e"))
+		    window.location.assign("oportunidades/gc/centro-este-europa/opc1.html");
+		  else if ((programa === "gc") && (zona === "ap"))
+		    window.location.assign("oportunidades/gc/asia-pacifico/opc1.html");
+		  else if ((programa === "gc") && (zona === "eo-an"))
+		    $("#extra").html("<strong>Falta añadir oportunidad Global Citizen  + Europa Occidental y América del Norte</strong>");
+		  else if ((programa === "gc") && (zona === "lt"))
+		    window.location.assign("oportunidades/gc/latinoamerica/opc1.html");
+		  
+		  // Oportunidades de global talent
+		  else if ((programa === "gt") && (zona === "a"))
+		    $("#extra").html("<strong>Falta añadir oportunidad Global Talent + Africa</strong>");
+		  else if ((programa === "gt") && (zona === "om-na"))
+		    $("#extra").html("<strong>Falta añadir oportunidad Global Talent  + Oriente Medio y Norte de África</strong>");
+		  else if ((programa === "gt") && (zona === "c-e-e"))
+		    window.location.assign("oportunidades/gt/centro-este-europa/opc1.html");
+		  else if ((programa === "gt") && (zona === "ap"))
+		    $("#extra").html("<strong>Falta añadir oportunidad Global Talent  + Asia-Pacífico</strong>");
+		  else if ((programa === "gt") && (zona === "eo-an"))
+		    window.location.assign("oportunidades/gt/europa-occidental-america-norte/opc1.html");
+		  else if ((programa === "gt") && (zona === "lt"))
+		    $("#extra").html("<strong>Falta añadir oportunidad Global Citizen  + Latinoamérica</strong>");
+		    
+		  // Oportunidades de global entrepeneur
+		  else if ((programa === "ge") && (zona === "a"))
+		    $("#extra").html("<strong>Falta añadir oportunidad Global Entrepeneur + Africa</strong>");
+		  else if ((programa === "ge") && (zona === "om-na"))
+		    window.location.assign("oportunidades/ge/oriente-medio-norte-africa/opc1.html");
+		  else if ((programa === "ge") && (zona === "c-e-e"))
+		    window.location.assign("oportunidades/ge/centro-este-europa/opc1.html");
+		  else if ((programa === "ge") && (zona === "ap"))
+		    $("#extra").html("<strong>Falta añadir oportunidad Global Entrepeneur  + Asia-Pacífico</strong>");
+		  else if ((programa === "ge") && (zona === "eo-an"))
+		    window.location.assign("oportunidades/ge/europa-occidental-america-norte/opc1.html");
+		  else if ((programa === "ge") && (zona === "lt"))
+		    window.location.assign("oportunidades/ge/latinoamerica/opc1.html");
+		}
+		
+		/**
+		 * 
+		 */
+		function crearPregunta (pregunta, respuestas, idRespuestas)
+		{
+		  var preguntaCompleta = "";
+		  if (arguments.length > 3) //si tiene más de tres argumetos esta función no hará lo que quiero
+		    preguntaCompleta = "¡ERROR! :( Se le han pasado más de dos argumetos a la función crear pregunta";
+		  else if (Array.isArray(respuestas) && Array.isArray(idRespuestas) && (respuestas.length === idRespuestas.length))
+		  {
+		    preguntaCompleta += "<strong>" + pregunta + "<strong><br>";
+		    
+		    for (var i = 0; i < respuestas.length; i++)
+		        preguntaCompleta += '<button id="' + idRespuestas[i] + '" type="button" class="btn btn-default">' + respuestas[i] + '</button>';
+		        
+        preguntaCompleta += "<hr>";
+		  }
+		  else
+		    preguntaCompleta = "¡ERROR! :( No se han pasado bien los vectores de respuestas y idRespuestas";
+
+		  return preguntaCompleta;
+		}
+	</script>
+</head>
+  <div class="fondo-semitransparente">
+	<div class="container">
+	<div class="row">
+	  <div class="col-md-6">
+	  <h1>¿Qué puedes hacer este verano?</h1>
+	  </div>
+	  <div class="col-md-6">
+	  <img src="img/logo.png" alt="Logotipo" class="img-responsive">
+	  </div>
+	</div>
+	<div class="resaltar-azul">
+	<p>AIESEC es una organización global, apolítica y sin ánimo de lucro formada por jóvenes profesionales, estudiantes universitarios y recién graduados. Estamos interesados en temas globales como la interculturalidad, el liderazgo y el emprendimiento.</p>
+	<p>Rellena esta encuesta para saber cual de nuestos programas se adapta mejor a ti. ¡Tardarás menos de un minuto!</p>
+	</div>
+	<p id="uni"></p>
+	<p id="practicas-voluntariado"></p>
+	<p id="curso"></p>
+	<p id="resultado"></p>
+	<h2 id="concretar"></h2>
+	<p id="area"></p>
+	<p id="zona"></p>
+	<p id="enviar"></p>
+	<p id="extra"></p>
+	</div>
+	</div>
+</html>
